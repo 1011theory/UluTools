@@ -25,7 +25,7 @@ public class UluTools : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "Blutility", "UnrealEd", "DataValidation"
+				"Core", "Blutility", "UnrealEd", "DataValidation", "Projects"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

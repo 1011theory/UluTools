@@ -146,7 +146,7 @@ Luckily, our asset validation tools flag these issues. But we still need a way t
 
 1. Ensure that you have assigned your desired `soundclass` and optionally `attenuation settings` to your `UluRules` preset in the `Ulu Tools Dev Settings`.
 2. Select all your sounds and meta sounds that need to be fixed.
-3. Right-click on any of the sounds, and choose one of the two Ulu Tools actions `Apply Soundclass` or `Apply Sound Settings`
+3. Right-click on any of the sounds, and choose one of the two Ulu Tools actions `Assign Soundclass` or `Assign Attenuation`.
    
    ![image](https://github.com/user-attachments/assets/a8117037-a14a-49c4-95ae-a259dfa0b81c)
 

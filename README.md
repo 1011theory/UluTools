@@ -11,7 +11,7 @@ _The Ulu is a knife at the center of Inuit culture. From processing seal skins t
 Ulu Tools extends the Unreal Editor to accelerate level artist workflows, ensure 3D assets comply with the defined asset pipeline, and help the production team identify issues with imported assets early in the process. Built for artists, with user-friendliness at its core.
 
 Features:
-- Level Design Tools for iteration speed and asset optimization
+- Level Design Tools for iteration speed and asset optimization.
 - One-click Material Instance creation from selected textures and assignment to meshes, while fixing wrong compression settings.
 - Customizable naming convention and compression settings presets that can be applied to large numbers of assets at once.
 - Asset Validation tools to warn artists when their imported assets may cause performance issues.
@@ -141,7 +141,7 @@ Here are the validator warnings and errors provided.
    
 ### Sound Fixer
 
-A common production problem is that sounds make to packaged builds without being assigned any `soundclass` or `attenuation settings`. Having no soundclass can become a big problem especially in terms of volume management within a game - if an explosion sound isn't marked as `sfx` and the player turned the sfx volume down, the volume of the explosion will still be at max loudness. Similarly, forgetting attenuation settings can make a sound feel out of place in the level. 
+A common production problem is that sounds make it to packaged builds without being assigned any `soundclass` or `attenuation settings`. Having no soundclass can become a big problem especially in terms of volume management within a game - if an explosion sound isn't marked as `sfx` and the player turned the sfx volume down, the volume of the explosion will still be at max loudness. Similarly, forgetting attenuation settings can make a sound feel out of place in the level. 
 Luckily, our asset validation tools flag these issues. But we still need a way to apply these fixes in bulk to thousands of assets at once. This is where the Ulu Tools `Sound Fixer` comes in handy.
 
 1. Ensure that you have assigned your desired `soundclass` and optionally `attenuation settings` to your `UluRules` preset in the `Ulu Tools Dev Settings`.

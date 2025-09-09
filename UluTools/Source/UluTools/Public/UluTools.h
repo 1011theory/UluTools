@@ -8,8 +8,17 @@
 class FUluToolsModule : public IModuleInterface
 {
 public:
-
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
+private:
+	TSharedRef<FExtender> GetLevelViewportContextMenuExtender(const TSharedRef<FUICommandList> CommandList, const TArray<AActor*> InActors);
+
+	FDelegateHandle LevelViewportExtenderHandle;
+
+	// List of UI commands used by the various menus
+	TSharedPtr<FUICommandList> DefaultCommandList;
+
+	void BindMenuCommands();
 };

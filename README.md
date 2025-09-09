@@ -11,12 +11,13 @@ _The Ulu is a knife at the center of Inuit culture. From processing seal skins t
 Ulu Tools extends the Unreal Editor to accelerate level artist workflows, ensure 3D assets comply with the defined asset pipeline, and help the production team identify issues with imported assets early in the process. Built for artists, with user-friendliness at its core.
 
 Features:
-- Level Design Tools for iteration speed and asset optimization.
+- Level Design Tools for faster iteration speed and asset optimization.
+- Battery Saving Mode to reduce editor power consumptions when idle.
 - One-click Material Instance creation from selected textures and assignment to meshes, while fixing wrong compression settings.
 - Customizable naming convention and compression settings presets that can be applied to large numbers of assets at once.
 - Asset Validation tools to warn artists when their imported assets may cause performance issues.
 - Batch Rename/Replace asset prefixes.
-- Most asset actions are available from the dedicated Editor Utility widgets or directly by right-clicking on the assets in the content browser.
+- Most asset actions are available from the dedicated Editor Utility widgets or directly by right-clicking on the target assets.
 
 ---
 

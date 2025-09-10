@@ -20,6 +20,10 @@ void FUluToolsModule::StartupModule()
 
 	MenuExtenders.Add(FLevelEditorModule::FLevelViewportMenuExtender_SelectedActors::CreateRaw(this, &FUluToolsModule::GetLevelViewportContextMenuExtender));
 	LevelViewportExtenderHandle = MenuExtenders.Last().GetHandle(); //this is to reference it later when we want to remove the extender.
+
+	auto& ToolbarExtenders = LevelEditorModule.GetAllLevelEditorToolbarViewMenuExtenders();
+	ToolbarExtenders.Add(FLevelEditorModule::FLevelEditorMenuExtender::CreateRaw(this, &FUluToolsModule::GetLevelToolbarExtender));
+	LevelToolbarExtenderHandle = ToolbarExtenders.Last().GetHandle();
 }
 
 
@@ -35,6 +39,17 @@ void FUluToolsModule::ShutdownModule()
 				[this](const DelegateType& In) { return In.GetHandle() == LevelViewportExtenderHandle; });
 		}
 	}
+	if (LevelToolbarExtenderHandle.IsValid()) //Remove the level viewport Menu extender
+	{
+		FLevelEditorModule* LevelEditorModule = FModuleManager::Get().GetModulePtr<FLevelEditorModule>("LevelEditor");
+		if (LevelEditorModule)
+		{
+			typedef FLevelEditorModule::FLevelEditorMenuExtender ToolDelegateType;
+			LevelEditorModule->GetAllLevelEditorToolbarViewMenuExtenders().RemoveAll(
+				[this](const ToolDelegateType& In) { return In.GetHandle() == LevelToolbarExtenderHandle; });
+		}
+	}
+	
 	FUluIconsStyle::Shutdown();
 }
 
@@ -62,12 +77,30 @@ TSharedRef<FExtender> FUluToolsModule::GetLevelViewportContextMenuExtender(const
 			EExtensionHook::After,
 			LevelEditorCommandBindings,
 			FMenuExtensionDelegate::CreateLambda([this, Actors](FMenuBuilder& MenuBuilder)
-		{
+			{
 				MenuBuilder.AddMenuEntry(FULUCommands::Get()._SnapToActor);
+				
 				MenuBuilder.AddMenuEntry(FULUCommands::Get()._MatchActorSize);
-		})
+			})
 		);
 	}
+	return Extender;
+}
+
+TSharedRef<FExtender> FUluToolsModule::GetLevelToolbarExtender(const TSharedRef<FUICommandList> CommandList)
+{
+	TSharedRef<FExtender> Extender = MakeShareable(new FExtender);
+	
+	FLevelEditorModule& LevelEditor = FModuleManager::GetModuleChecked<FLevelEditorModule>(TEXT("LevelEditor"));
+	TSharedRef<FUICommandList> LevelEditorCommandBindings = LevelEditor.GetGlobalLevelEditorActions();
+	Extender->AddMenuExtension("LevelEditorViewport", EExtensionHook::After, LevelEditorCommandBindings,
+		FMenuExtensionDelegate::CreateLambda([this](FMenuBuilder& MenuBuilder)
+			{
+				MenuBuilder.AddMenuEntry(FULUCommands::Get()._BatterySave);
+			})
+
+		);	
+	
 	return Extender;
 }
 
@@ -79,9 +112,10 @@ void FUluToolsModule::BindMenuCommands()
 	FULUCommands::Register();
 	const FULUCommands& Commands = FULUCommands::Get();
 	
+	
 	// Session 
 	DefaultCommandList->MapAction(
-		Commands._SnapToActor,
+		Commands._SnapToActor, 
 		FExecuteAction::CreateLambda([]() { return FULUCommands::SnapToActor(); }),
 		FCanExecuteAction::CreateLambda([]() { return GEditor->GetSelectedActorCount()>1; }));
 
@@ -90,8 +124,14 @@ void FUluToolsModule::BindMenuCommands()
 		FExecuteAction::CreateLambda([]() { return FULUCommands::MatchActorSize(); }),
 		FCanExecuteAction::CreateLambda([]() { return GEditor->GetSelectedActorCount()>1; })); // Will grey out the menu entry if we don't have enough actors to snap.
 
-	
+	DefaultCommandList->MapAction(
+		Commands._BatterySave,
+		FExecuteAction::CreateLambda([]() { return FULUCommands::ToggleBatterySaver(); }),
+		FCanExecuteAction(), FIsActionChecked::CreateStatic( &FULUCommands::IsBatterySaveModeOn)
 
+		);
+
+	
 	// Append the command to the editor module
 	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked< FLevelEditorModule >("LevelEditor");
 	LevelEditorModule.GetGlobalLevelEditorActions()->Append(DefaultCommandList.ToSharedRef());

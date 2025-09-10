@@ -27,10 +27,16 @@ public:
 	static void SnapToActor();
 
 	static void MatchActorSize();
+
+	static void ToggleBatterySaver();
+
+	static bool IsBatterySaveModeOn();
 	
 	TSharedPtr<FUICommandInfo> _SnapToActor;
 
 	TSharedPtr<FUICommandInfo> _MatchActorSize;
+
+	TSharedPtr<FUICommandInfo> _BatterySave;
 
 	
 	/*// Is PDG/BGEO commandlet enabled

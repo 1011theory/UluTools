@@ -19,7 +19,9 @@ void FUluIconsStyle::Initialize()
 
 	// Register your image as a brush
 	StyleInstance->Set("UluTools.Icon", new FSlateImageBrush(ContentDir / TEXT("UluTools_Icon.png"), FVector2D(40.f, 40.f)));
-
+	StyleInstance->Set("UluToolsStyle._MatchActorSize", new FSlateImageBrush(ContentDir / TEXT("UluTools_Icon.png"), FVector2D(40.f, 40.f)));
+	StyleInstance->Set("UluToolsStyle._SnapToActor", new FSlateImageBrush(ContentDir / TEXT("UluTools_Icon.png"), FVector2D(40.f, 40.f)));
+	StyleInstance->Set("UluToolsStyle._BatterySaver", new FSlateImageBrush(ContentDir / TEXT("UluTools_Icon.png"), FVector2D(40.f, 40.f)));
 	FSlateStyleRegistry::RegisterSlateStyle(*StyleInstance);
 }
 

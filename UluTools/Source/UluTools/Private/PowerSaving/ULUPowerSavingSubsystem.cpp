@@ -14,16 +14,12 @@ UULUPowerSavingSubsystem::UULUPowerSavingSubsystem()
 
 ETickableTickType UULUPowerSavingSubsystem::GetTickableTickType() const
 {
-	// By default (if the child class doesn't override GetTickableTickType), don't let CDOs ever tick: 
 	return FTickableGameObject::GetTickableTickType(); 
 }
 
 
 bool UULUPowerSavingSubsystem::IsAllowedToTick() const
 {
-	// No matter what IsTickable says, don't let CDOs or uninitialized world subsystems tick :
-	// Note: even if GetTickableTickType was overridden by the child class and returns something else than ETickableTickType::Never for CDOs, 
-	//  it's probably a mistake, so by default, don't allow ticking. If the child class really intends its CDO to tick, it can always override IsAllowedToTick...
 	return bInitialized;
 }
 
@@ -124,6 +120,25 @@ void UULUPowerSavingSubsystem::StartPowerSaving()
 	if (GEngine)
 	{
 		GetWorldEditor()->GetTimerManager().SetTimer(IdleTimer, this, &UULUPowerSavingSubsystem::OnIdleTimer, 5.f,  true);
+	}
+}
+
+void UULUPowerSavingSubsystem::StopPowerSaving()
+{
+	if (GEngine)
+	{
+		GetWorldEditor()->GetTimerManager().ClearTimer(IdleTimer);
+			
+		if(bPowerSaving)
+		{
+			if (UEditorEngine* UnrealEditor = Cast<UEditorEngine>(GEngine))
+			{
+				bPowerSaving = false;
+		
+				FText DisplayName = FText::FromString(TEXT("Powersaving mode editor freezing"));
+				UnrealEditor->RemoveViewportsRealtimeOverride(DisplayName);
+			}
+		}
 	}
 }
 

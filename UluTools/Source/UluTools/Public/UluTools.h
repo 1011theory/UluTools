@@ -15,7 +15,10 @@ public:
 private:
 	TSharedRef<FExtender> GetLevelViewportContextMenuExtender(const TSharedRef<FUICommandList> CommandList, const TArray<AActor*> InActors);
 
+	TSharedRef<FExtender> GetLevelToolbarExtender(const TSharedRef<FUICommandList> CommandList);
+
 	FDelegateHandle LevelViewportExtenderHandle;
+	FDelegateHandle LevelToolbarExtenderHandle;
 
 	// List of UI commands used by the various menus
 	TSharedPtr<FUICommandList> DefaultCommandList;

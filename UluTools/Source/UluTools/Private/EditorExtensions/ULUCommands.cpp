@@ -6,20 +6,22 @@
 #include "Selection.h"
 
 #include "ULUIcons.h"
+#include "PowerSaving/ULUPowerSavingSettings.h"
+#include "PowerSaving/ULUPowerSavingSubsystem.h"
 
 #define LOCTEXT_NAMESPACE "FUluToolsModule"
 
 FULUCommands::FULUCommands()
-: TCommands<FULUCommands>	(TEXT("Ulu Tools"), NSLOCTEXT("Contexts", "Ulu Tools", "Ulu Tools Plugin"), NAME_None, FUluIconsStyle::GetStyleSetName())
+: TCommands<FULUCommands>	(TEXT("UluToolsStyle"), NSLOCTEXT("Contexts", "Ulu Tools", "Ulu Tools Plugin"), NAME_None, FUluIconsStyle::GetStyleSetName())
 {
 }
 
 
 void FULUCommands::RegisterCommands()
 {
-	UI_COMMAND(_SnapToActor, "Snap To First Actor Selected", "Snaps all selected actors to the first actor selected in the viewport.", EUserInterfaceActionType::Button, FInputChord());
+	UI_COMMAND(_SnapToActor, "Snap To Actor", "Snaps actors to first actor selected", EUserInterfaceActionType::Button, FInputChord());
 	UI_COMMAND(_MatchActorSize, "Match Size Of First Actor Selected", "Makes all selected actors have the same size as the first actor selected.", EUserInterfaceActionType::Button, FInputChord());
-	
+	UI_COMMAND(_BatterySave, "Battery Saver Mode", "Pauses/unpauses editor rendering after the defined waiting time. Waiting time can be customized from the Ulu Tools project settings.", EUserInterfaceActionType::ToggleButton, FInputChord());
 }
 
 
@@ -80,4 +82,29 @@ void FULUCommands::MatchActorSize()
 		CurrentActor->PostEditMove(true);
 	}
 	LevelDirtyCallback.Request();
+}
+
+
+void FULUCommands::ToggleBatterySaver()
+{
+	if (UULUPowerSavingSettings* Settings = GetMutableDefault<UULUPowerSavingSettings>())
+	{
+		if (!Settings->PowerSavingMode)
+		{
+			Settings->PowerSavingMode = true;
+			Settings->SaveConfig();
+			GEditor->GetEditorSubsystem<UULUPowerSavingSubsystem>()->StartPowerSaving();
+			return;
+		}
+		Settings->PowerSavingMode = false;
+		Settings->SaveConfig();
+		GEditor->GetEditorSubsystem<UULUPowerSavingSubsystem>()->StopPowerSaving();
+	}
+}
+
+bool FULUCommands::IsBatterySaveModeOn()
+{
+	const UULUPowerSavingSettings* Settings = GetDefault<UULUPowerSavingSettings>();
+	
+	return Settings->PowerSavingMode;
 }

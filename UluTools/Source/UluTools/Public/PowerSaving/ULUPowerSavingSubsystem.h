@@ -48,4 +48,7 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	void StartPowerSaving();
+
+	UFUNCTION(BlueprintCallable)
+	void StopPowerSaving();
 };
